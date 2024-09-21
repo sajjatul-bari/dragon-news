@@ -1,7 +1,28 @@
 import { Link } from "react-router-dom";
 import Navbar from "../Shared/Navbar/Navbar";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProviders";
 
 const Register = () => {
+  const { createUser } = useContext(AuthContext);
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    console.log(e.currentTarget);
+    const form = new FormData(e.currentTarget);
+    const name = form.get("name");
+    const photo = form.get("photo");
+    const email = form.get("email");
+    const password = form.get("password");
+    console.log(name, email, password);
+    createUser(email, password)
+      .then((result) => {
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <div>
       <Navbar></Navbar>
@@ -9,7 +30,7 @@ const Register = () => {
       <div className="hero">
         <div className="hero-content  lg:w-1/2">
           <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl pb-5">
-            <form className="card-body">
+            <form onSubmit={handleRegister} className="card-body">
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Name</span>
@@ -17,6 +38,7 @@ const Register = () => {
                 <input
                   type="text"
                   placeholder="Name"
+                  name="name"
                   className="input input-bordered"
                   required
                 />
@@ -27,6 +49,7 @@ const Register = () => {
                 </label>
                 <input
                   type="text"
+                  name="photo"
                   placeholder="Photo URL"
                   className="input input-bordered"
                   required
@@ -38,6 +61,7 @@ const Register = () => {
                 </label>
                 <input
                   type="email"
+                  name="email"
                   placeholder="email"
                   className="input input-bordered"
                   required
@@ -49,6 +73,7 @@ const Register = () => {
                 </label>
                 <input
                   type="password"
+                  name="password"
                   placeholder="password"
                   className="input input-bordered"
                   required
